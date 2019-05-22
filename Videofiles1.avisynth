@@ -1,0 +1,34 @@
+Source:https://avidemux.org/smif/index.php?topic=12459.0
+« Last Edit: August 02, 2013, 11:37:14 PM by lukalev »
+
+
+LoadPlugin("c:\video\ffms2.dll")
+Import("c:\video\ffms2.avsi")
+file="C:\video\video2.mp4"
+#openv1=DirectShowSource(file,fps=4,convertfps=true)
+#A=DirectShowSource(file, video=False)
+openv1=FFmpegSource2(file, atrack = -1)
+#openv1=FFmpegSource2(file, atrack = -1, colorspace="YV12")
+openv1=ConvertAudioTo16bit(openv1)
+#AudioDub(openv1,A)
+seconds=180
+secondsUC=60
+#ConverttoYv12(openv1)
+#openv2=DirectShowSource(file,fps=4,convertfps=true)
+#ConvertAudioTo32bit(openv2)
+#ConverttoYv12(openv2)
+#cap1=Trim(openv1,0,20,false)
+#cap2=Trim(openv2,0,9,false)
+#v1 = cap1.ChangeFPS(4)
+#v2 = cap2.ChangeFPS(4)
+#ConverttoYv12()
+#AlignedSplice(v1,v2,BlankClip(v1,length=30,color=$000000))
+#trim5seconds
+videoLength=FrameRate(openv1)*seconds
+UCLength=FrameRate(openv1)*secondsUC
+videoLength=FrameCount(openv1)<=videoLength ? FrameCount(openv1) : videoLength
+v1=Trim(openv1,0,int(videoLength),false)
+AlignedSplice(v1,BlankClip(v1,length=int(UCLength),color=$000000))
+Subtitle("Some text here", first_frame=FrameCount(openv1)-int(UCLength),font="arial", size=24, text_color=$FFFFFF, align=5)
+#Loop(5,FrameCount(openv1)-30,FrameCount(openv1)-1)
+

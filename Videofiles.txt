@@ -1,0 +1,68 @@
+Source:https://avidemux.org/smif/index.php?topic=12459.0
+« Last Edit: August 02, 2013, 11:37:14 PM by lukalev »
+
+
+
+Process/edit MP4(AAC) videos in Windows (x64) 
+
+Scripting with AVISynth
+and saving them back to MP4 using Avidemux.
+
+
+MP4 containers are harder to process compared to AVIs 
+This process also isn't straight forward
+
+How to crop/cut multiple videos
+with different frame rates and dimensions
+
+
+1. install last version of AviSynth
+2. install last version of Haali Media Splitter (MatroskaSplitter installer)
+3. install ffdshow, assign AviSynth checkbox, after installation open video decoder configuration->Codecs->Raw video=all supported
+4. download Win7DSFilterTweaker 5.9, extract it and run Win7DSFilterTweaker_5.9.exe.
+Go to preffered decoders and select ffdshow on MP4, AAC,etc
+5. install avidemux (assign AviSynth checkbox)
+6. download and unzip ffmpegsource avysinth plugin. Copy its conent wherever you want.
+I've opened myself a common folder for testing on c:\video. Inside i've copied ffmpegsource files, created my avs file, copied mp4 files, images, etc...
+
+Write a avisynth script into notepad and save it with avs extension. Bellow is my code (look at avisynth wikipedia for syntax and functions descriptions).
+After you save the file open this same .avs file with media player to see if it works. Any syntax errors should be displayed to you in media player itself...
+Final step is to save .avs script back to MP4. To do this open AVIDemux Proxy GUI, select custom script tab and insert your avs script in there.
+Click create proxy. Open AViDemux program, go to file->connect to avsproxy and you should be able to see the video inside Avidemux.
+Now you can play with the Output settings. I usually leave Video output to Copy or select MPEG-4, select Audio source AAC Faac and Output format MP4 Muxer.
+Finally go to file->save, type filename.mp4 and save it!
+
+Thats it. Note that your process may not be exactly the same as mine because we all have different systems, installed programs, different register values, etc.
+If it does not work for you, you may want to uninstall everything and begin from zero.
+
+
+LoadPlugin("c:\video\ffms2.dll")
+Import("c:\video\ffms2.avsi")
+file="C:\video\video2.mp4"
+#openv1=DirectShowSource(file,fps=4,convertfps=true)
+#A=DirectShowSource(file, video=False)
+openv1=FFmpegSource2(file, atrack = -1)
+#openv1=FFmpegSource2(file, atrack = -1, colorspace="YV12")
+openv1=ConvertAudioTo16bit(openv1)
+#AudioDub(openv1,A)
+seconds=180
+secondsUC=60
+#ConverttoYv12(openv1)
+#openv2=DirectShowSource(file,fps=4,convertfps=true)
+#ConvertAudioTo32bit(openv2)
+#ConverttoYv12(openv2)
+#cap1=Trim(openv1,0,20,false)
+#cap2=Trim(openv2,0,9,false)
+#v1 = cap1.ChangeFPS(4)
+#v2 = cap2.ChangeFPS(4)
+#ConverttoYv12()
+#AlignedSplice(v1,v2,BlankClip(v1,length=30,color=$000000))
+#trim5seconds
+videoLength=FrameRate(openv1)*seconds
+UCLength=FrameRate(openv1)*secondsUC
+videoLength=FrameCount(openv1)<=videoLength ? FrameCount(openv1) : videoLength
+v1=Trim(openv1,0,int(videoLength),false)
+AlignedSplice(v1,BlankClip(v1,length=int(UCLength),color=$000000))
+Subtitle("Some text here", first_frame=FrameCount(openv1)-int(UCLength),font="arial", size=24, text_color=$FFFFFF, align=5)
+#Loop(5,FrameCount(openv1)-30,FrameCount(openv1)-1)
+
