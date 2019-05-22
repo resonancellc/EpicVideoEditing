@@ -1,0 +1,195 @@
+source: http://web.archive.org/web/20021017190109/http://www.doom9.org/ivtc-tut.htm
+
+
+Force Film, IVTC, and Deinterlacing - what is DVD2AVI trying to tell you and what can you do about it?
+
+We get the same questions over and over again asking us to explain what DVD2AVI is telling you, and what you should do with that information. This is difficult stuff. It is also very important stuff. Your encode can be turn out well, or it can be ruined by what you decide to do in the very early stages of creating .d2v projects and .avs scripts.
+
+The real heart of this tutorial has been already supplied by hakko504. After it was written and became a Sticky in the DVD2AVI Forum, many people, still unclear about things, added questions which were graciously answered by hakko504. But in the process, the Sticky became muddled and difficult to wade through.
+
+It's being cleaned up a bit, with other contributions by jggimi and manono, in the hopes that by doing this, all the questions (or most anyway) concerning video stream formats will be answered.
+
+Most of the information will apply to those working with NTSC material. But there is also enough for those of you with PAL discs to aid you in making sound decisions. Also much will also be directed towards users of Gordian Knot, since its procedures include both DVD2AVI and AviSynth.
+
+We'll start with hakko504's main contribution.
+
+SOME TIPS FOR MAKING SENSE OF WHAT DVD2AVI TELLS YOU
+
+A TRULY INTERLACED SOURCE CANNOT BE IVTC’D. Unfortunately for us, DVD2AVI can not distinguish between bad telecining and genuine interlace. They will both appear in the statistics window as NTSC. One way of finding which is which is by using DVD2AVI to approximately find the NTSC parts of the film. Then use the following .avs to check the frames in Virtual Dub:
+
+ LoadPlugin("mpeg2dec.dll")
+ LoadPlugin("Decomb.dll")
+ MpegSource("clip.d2v")
+ Telecide(post=false)
+
+You should look for an interlaced picture. They mostly come out with jagged edges, or the telltale fine horizontal lines in a scene with movement. If you only get 1 (or 2) with long irregular intervals of progressive (non-interlaced) frames, together with repeated frames (1 in 5) then you can safely use IVTC on the film.
+
+If, however, almost every frame shows signs of interlacing then you must use a real de-interlacer instead. There is a very fine article by robshot on this site that explains a lot about telecining, unfortunately without pictures (link at bottom). Nicky Page also has some good information on the subject in his article (link at bottom). Nicky's site is a good resource for basic DVD information, very well written and with relevant pictures. Unfortunately he doesn't maintain it any longer and therefore a lot of the info is out of date (and there are a few errors as well, but hey, nobody's perfect).
+
+__________________________________________________________________________________________________________________________________________________________
+
+Sometimes difficult material can be made more understandable if it's repeated, perhaps using different language. There is some overlap in jggimi's portion, but it bears going over again. Much of it is directed specifically towards GKnot users.
+_________________________________________________________________________________________________________________________________________________________
+
+GORDIAN KNOT, DVD2AVI, IVTC, AND DEINTERLACING
+
+LEVEL SETTING 35mm film is 24fps, and NTSC video is 29.97fps.
+
+The process to go from 35mm film to NTSC video adds ~6 frames per second. That process is called Telecining. The graphic under hakko504’s definition, above, shows how new frames are created. You can also review robshot's great description should you need more information (link at bottom).
+
+IVTC is Inverse Telecining. When done properly, it removes those 6 extra frames. The resulting video file will have a frame rate of 23.976fps.
+
+USING DVD2AVI. Content that displays as FILM in DVD2AVI has been Telecined. Use Force FILM as your IVTC methodology.
+
+But, sometimes, content that has a low FILM %, or even none, might have been Telecined. You will only know for sure by examining individual frames. Examination is critical, because NTSC content which has not been Telecined should not be put through an IVTC process, and needs to be deinterlaced while remaining at 29.97 frames per second.
+
+The easiest way to examine frames is by by saving a small project with Force FILM turned off. Pick a scene with motion, and use the [] buttons. Open the .d2v in Gordian Knot, and advance frame by frame. If you see interlace artifacts in 2 of 5 frames, you are looking at Telecined content.
+
+LEADERS. Have you noticed that on many discs, at the start of a film you get NTSC frames, and you end up with FILM at 99%? Often, production and distribution leaders on DVD are NTSC. To avoid being misled by them, I start my preview after the leaders, using the [ button, and look for 100% FILM. If I don’t get it, I’ll know it’s because of an odd set of frames somewhere in the main content, and not due to leaders. If the leaders are the only non-Telecined frames, I use Force FILM.
+
+SELECTING IVTC. There are 4 methods to IVTC with Gordian Knot:
+
+1. Force FILM in DVD2AVI when the content type is FILM. The .d2v project file will automatically adjust the frame rate to 23.976, and restore the proper progressive frames.
+
+The rest of these methods use filters which analyze individual frames. Be sure to use the "IVTC in avs -> correct Frame Count" box so that GKnot can calculate your credits start frame, adjust the framerate, and make other calculations properly. GKnot will enable the box only when you use Option 2. For Options 3 and 4, therefore, start with Option 2, then edit the .avs script before encoding.
+
+2. Check IVTC in the "Save & Encode" window. This will turn on the Decomb filter set, and use the Telecide and Decimate filters. Feel free to change Decomb options and test the .avs before encoding.
+
+3. You can manually enable the GreedyHMA filter (and .dll file) by removing the "#" in front of those two lines in the .avs file produced by GKnot, converting those from comments to script commands.
+
+4. Use another AviSynth filter, such as IVTC2.2, which can be found in the Downloads area of this site.
+
+SELECTING DE-INTERLACING. If the content is interlaced, but has not been Telecined (video, or a hybrid of video and film), there are 3 ways to do so with Gordian Knot:
+
+1. Use Fast Deinterlacing, which cuts the vertical resolution in half
+
+2. Use Field Deinterlacing, which blends pixels to eliminate interlace artifacts
+
+3. Use another AviSynth filter, such as Telecide.
+
+The choice between these methods will depend upon your content. You can preview the .avs script to determine which looks best to you.
+
+__________________________________________________________________________________________________________________________________________________________
+It can be confusing, of course. Manono’s contribution includes some general advice for NTSC encodings. He also has advice for special content, such as Anime, hybrids of film and video, as well as old, silent films shot at unusual framerates. Later, hakko504 speaks to the PAL Area people among us.
+__________________________________________________________________________________________________________________________________________________________
+
+IVTC ADVICE
+
+FOR NTSC PEOPLE: FORCE FILM WHEN YOU CAN. IVTC WHEN YOU CAN’T FORCE FILM. DEINTERLACE WHEN YOU CAN’T DO EITHER.
+
+FORCE FILM. Most advice says to Force Film when the percentage in DVD2AVI shows as greater than 95%. Have you ever done an encode using Force Film at 99% and still found interlaced frames when done? I have -- many times. Force Film is not guaranteed to work perfectly unless it shows as Film (=100% Film). There may be a few interlaced frames, or the video may play jerky at a few spots. These interlaced frames may be in the pre-movie stuff such as the studio logos, they may be at chapter breaks, or they may be at other places where edits were done after the telecined process. Most of the time Force Film will work fine at those high percentages, but not always. When in doubt, create the .d2v with No Field Operation (29.97fps), and then use:
+
+ Telecide(Post=false)
+ Decimate(Cycle=5)
+
+Using Post=false will disable the deinterlacer and speed up the encoding considerably (and don't forget to load the Decomb Plugin into your .avs). But, to be on the safe side, you may wish to leave in the Deinterlacer. Another alternative would be to Force Film and then turn on FieldDeinterlace in the .avs. In any case, material showing a lower percentage than 95% Film (or higher than 5% NTSC) should be IVTC'd and not Force Filmed.
+
+TO IVTC OR TO DEINTERLACE. As hakko504 and jggimi both said, just because DVD2AVI shows it to be Interlaced or as 100% NTSC doesn't mean it's pure interlaced material. In fact, in most cases it can be IVTC'd. So, how can you tell which to use? Look at the frames. How can you do that? Make your .d2v with No Field Operation (29.97fps), open it in GKnot, and scroll to a place with continual movement over 10 frames or more. Then start advancing a frame at a time. If, in every 5 frames, you see 2 interlaced frames and 3 non-interlaced (progressive) frames, then it has been telecined and can be IVTC'd (Inverse Telecined). If you see that every frame is interlaced, then it was created at 29.97fps (actually 30fps). These can't be IVTC'd. If you try, you'll be dropping non-duplicate material, and it will play very jerky (most obvious during a scrolling or panning scene). They can only be deinterlaced. Another way to check the frames is to make your .avs at 29.97fps (before IVTC) and open it in VDub or Nandub and make the same examination of the frames. Or use hakko504's script above and open it in VDub. Using his script, you're hoping to see very few interlaced frames (which a deinterlacer can take care of), and one duplicate in every 5 frames. There are other combinations of video and progressive frames which may show up and these are covered briefly in the “Bad Telecines” paragraph further down.
+
+WHICH IVTC TO USE. For a couple of reasons, Decomb is the “default” IVTC of this guide. It is the only filter that can handle all possible combinations of frame reconstruction, decimation and deinterlacing. It is the default IVTC for such programs as Gordian Knot and DVD2SVCD. Most of us here have used GKnot at one time or another and have it on our computers already, and therefore have the Decomb.dll already (although an older version is included and users should replace it with the current version). It has a very good Decomb Help.html file included with it, and the two Doom9 guides are linked at the bottom of this page. GreedyHMA is another worthy contender, can reverse the 2:3 pull down for NTSC material, can also handle the so-called 2:2 pull down or shifted fields problem of some PAL DVDs, has an excellent Deinterlacer built in, as well as its own Vertical Filter. It comes with an excellent Readme of its own. For Anime in particular, IVTC2.2 has its adherents. It only handles undoing the Telecining for NTSC DVDs and doesn’t have a Deinterlacer built into it. But what it does, it does very well. It also includes a Help File. There are still some that prefer to IVTC Anime manually or automatically using TMPEGEnc and then frameserving with a VFAPI. Links to the Doom9 guides for those methods are at the bottom of this page. In the interests of impartiality, the authors shouldn’t really be recommending one over the other. We have our own favorites for the different situations that arise (and we don’t always agree). All we can do is to recommend that the user try the different solutions and discover for himself which he prefers.
+
+PAL TO NTSC. Ordinarily there’s no problem converting a French or other PAL area movie (Le Pacte Des Loups, for example), to R1 American NTSC DVD (Brotherhood Of The Wolf). Film is shot at 24fps all over the world, so if you use the film source, it will be telecined as any other movie. But sometimes they aren’t done properly, and all kinds of problems may arise. I worked for a couple of days recently trying to IVTC a movie with 3 interlaced frames out of every 6, and never could get it to play smoothly. I wound up using Decomb’s Decimate(Mode=1) and leaving it at 29.97fps. On the other hand, a BBC TV comedy series I worked with (Jeeves And Wooster) was mastered from the PAL format video tapes and “telecined” to 29.97fps, and this script worked perfectly:
+
+ AssumeFPS(30)
+ Telecide()
+ Decimate(6)
+
+This returned it to its original 25fps, and it played smoothly. But the audio in such cases will become asynch and have to be resynched with a WAVE Editor. Or leave out the AssumeFPS(30) line, leave it at 24.975fps with no need to resynch the audio (but we like to do things properly around here).
+
+BAD TELECINES. Frequently, Hong Kong DVDs (and perhaps those from other areas also) are badly telecined and leave you with 4 of 5 frames interlaced. Those people should be shot for ruining perfectly good film material (“No trial, no jury-just straight to execution”-Pulp Fiction). You can try Decomb's Decimate(Mode=1), but it won't improve things much. Or you can just deinterlace. In addition, many PAL to NTSC conversions will have too many interlaced frames that won’t IVTC properly and will leave you with many deinterlaced blended or interpolated frames. Many DVDs come with fields already blended and after IVTC many will still remain as blended frames. It’s pretty much impossible to completely undo the damage from an improper telecine job. You can only hope that the resulting video will play smoothly and the blended frames won’t be too noticeable.
+
+PURE INTERLACED DVDS. What kinds of DVDs have been produced as NTSC Pure Interlace? Most Sports DVDs, most Concert DVDs, almost all Adult Films, some DVDs made from television shows, and movies made on low budgets and shot with video cameras are pure interlaced material. These can only be deinterlaced. But before you do, be sure to check the frames just to make sure. Don’t just rely on DVD2AVI to tell you. Deinterlace only as a last resort because of the quality hit you'll take. Sure, it's the easy way out, but we here at Doom9 pride ourselves on the quality of our work.
+
+SILENT FILMS. Before the age of the talkies, the silents were produced at any number of frame rates and usually less than 24fps. 16fps and 18fps were perhaps the most common frame rates. Sometimes these things have to be Deinterlaced. Sometimes they can be IVTC'd to 23.976fps (but with duplicate frames still remaining). But, with luck, you may be able to return some to their original frame rate. In the case of 18fps, you might try:
+
+ Telecide()
+ Decimate(Cycle=5) #which brings it down to 23.976fps
+ Decimate(Cycle=4) #which brings it down to 18fps (or close enough anyway). 
+
+But you'll have to do a lot of frame counting to figure out the original frame rate unless you get lucky in some research. You have to discover the interlaced-progressive pattern. One of the beauties of doing it this way is that the audio doesn't have to be adjusted. Another is that you'll save a lot of space so you can raise the bit rate because those old movies just chew up the bits. Or, you can add AssumeFPS(30) at the top, which will give you an exact 18fps when done, and then resynch the audio later.
+
+ANIME. Anime is the “I don’t get no respect” bastard child of video encoding. But it shouldn’t be. Because Anime NTSC DVDs are frequently the most difficult to IVTC properly, the greatest skill is required to work with them. As far as I know, for the best results, very few movies and none of the OVAs or TV series DVDs should be Force Filmed in DVD2AVI. On the other hand, almost all can be IVTC’d with good results (Neon Genesis Evangelion and Record Of Lodoss War being two possible major exceptions). With no other kinds of DVDs do you find more strongly held opinions about which IVTC to use and at what settings. So, to avoid the issue entirely, I’ll just recommend studying the .avs carefully in VDub-Nandub before encoding. Know all the possible parameters and settings of the IVTC you choose to use and be prepared to use them. Unless the video stream is very clean, I also recommend using some kind of Deinterlacer to take care of any remaining interlacing of flapping mouths, dark areas, etc. For PAL Anime, please see hakko504’s advice further down.
+
+THE DREADED HYBRIDS. Many "making of" documentaries or other special features on DVD’s, and unfortunately, some complete DVDs (a very few thank goodness) are a mix of Film and Video (Interlaced) material. Here you are faced with 2 choices, neither of them pleasant. It, in part, depends on how much of each there is and how it looks with the 2 solutions. For example, a DVD made from a television show might have been created in Film, but have a few minutes of Computer Generated effects done at 29.97fps. The Anime Serial Experiments Lain has some of this. So do the infamous Star Treck: The Next Generation DVDs. So, do you IVTC it and make it 23.976fps and have the CG material play jerky? Or do you make the whole thing 29.97fps so that it will play relatively smoothly (but in the process get lower quality for the same file size because of the 25% greater number of frames)? It's a tough decision. I've seen DVD Documentaries which are made up of mostly Film material. But there will also be interlaced photographs which are frequently panned or zoomed. You IVTC these and those photographs get very jerky. Perhaps the best solution is to use Decomb's Decimate(Mode=1). This will preserve most of the progressive material and will play relatively smoothly but, again, keep it at 29.97fps. I can't tell you what to do in those cases. You’ll have to experiment and see what looks best to you.
+
+__________________________________________________________________________________________________________________________________________________________
+
+PAL Guru hakko504 has some advice for handling PAL material: __________________________________________________________________________________________________________________________________________________________
+
+FOR PAL AREA PEOPLE:
+
+So far, most of what we have written is about NTSC rips. Now, when you have a PAL DVD, what do you do then?
+
+On the positive side, you don't have to IVTC. You also have a larger picture to begin with (720x576), which means more information to begin with. Thus you should be able to make a better rip! On the negative side is unfortunately the fact that a lot of PAL DVDs are made from inferior sources, like NTSC DVDs.
+
+You will, when dealing with PAL DVDs, get into three major cases, il buono, il brutto, il cattivo (TM Sergio Leone).
+
+THE GOOD: PROGRESSIVE DVDs. These are usually shot on FILM and speeded up to 25fps or in some cases have an extra frame added every second to keep the length of the movie constant. It is also not unusual for PAL DVDs to have the fields shifted in this manner: 1t2b 2t3b 3t4b etc. Some DVDs switch between real progressive and field shifted progressive. If this happens twice every second then you have a DVD with a field added every 12 frames to keep the time constant. Switching can also occur if the DVD has been edited somewhere during the mastering process.
+
+How do you see the differences between these cases? I’m afraid that the only thing that you can do is to closely examine the frames of the DVD. Usually you can very easily see if the major parts of the DVD are progressive, field shifted or rapidly switching. It can be much harder to spot a short sequence with the wrong field order, but if there are irregular switches then they will almost always appear at scene changes. Load the following script into VirtualDub and examine the frames closely:
+
+ LoadPlugin("mpeg2dec.dll")
+ #LoadPlugin("Decomb.dll") #Needed later for Telecide and Decimate
+ MpegSource("clip.d2v")
+
+If the DVD looked interlaced already in DVD2AVI then you should create the .d2v file with Field Operation->Swap Field Order turned ON. If you find sequences where the field order switches then you must use Telecide(post=true) in your final script, but for further investigations please use post=false. Now, assuming that you have established that you have a progressive DVD, either by adding Telecide or by turning Swap Field Order ON/OFF, then we proceed to look for doubled frames. If they appear, they should only appear once every second, and in this case you must add Decimate(cycle=25) to your final script.
+
+As a rule of thumb: The DVD’s that have only a few switches are very few and if you just remember to look at the final AVI before deleting the VOBs, you can almost always assume that if you look at a few different sequences in the DVD and they all show the same pattern (progressive, field shifted or switching twice per second) the whole DVD will adhere to that pattern. What did you say? It still doesn’t look good? Lots of horizontal lines all over the place? You have a truly interlaced DVD (Bad). Is there a lot of ghosting (Ugly)?
+
+THE BAD: INTERLACED DVDs. As with NTSC interlace, the only thing to do is to run some form of de-interlacer, like FieldDeinterlace or GreedyHMA. These are quite common, as there is more stuff made for TV that is shot directly on video in Europe, even some quite high-class productions are shot directly on video and are therefore 50fps interlaced.
+
+THE UGLY: DVDS CONVERTED FROM NTSC TO PAL. These are very common among cheap DVDs. Usually they are created by blending two nearby frames into one new, in a manner that removes 1 frame in 6 (30->25fps). These look really bad and they are a PITA to work with. My solution is usually to let Telecide(post=true, blend=false) remain in the script. This will actually remove some of the worst ghosting. Then I add some form of SPATIAL smoothing. Temporal will only add to the ghosting and should be avoided at all cost in this kind of rips. If you think it looks too blurry, then try some sharpening, but be aware that this might enhance the edges of the ghost images, while at the same time remove the rest of the ghost, and you might not like the result.
+
+CONCLUSION
+
+The subject is not an easy one if you’re just learning it for the first time. It will take practice and experimentation to gain more understanding of the concepts and methods involved. But we hope this tutorial will help some of you. We welcome questions, comments, criticisms, corrections, requests, additions (and compliments). If you have some favorite links that help to illustrate some of these subjects, we’d like to know of them. We do request, though, that you make the comments and questions in another thread. We'd like to keep the sticky as clean as possible, and, as you can see, it's already quite long.
+
+With respect to Doom9 and his great site:
+
+hakko504, jggimi, and manono
+
+LINKS
+
+DVD LINKS
+
+http://www.dvddemystified.com/dvdfaq.html The mother of all DVD FAQs
+
+http://www.cs.tut.fi/~leopold/Ld/FilmToVideo/#DcAn How film is transferred to video
+
+http://www.widescreen.org/widescreen.shtml If you’ve ever needed convincing that widescreen is the version to own or back up, then make your way through this site. Then come back and tell us that Full Screen (Pan and Scan) is better.
+
+TELECINE LINKS
+
+http://www.doom9.org/synch.htm The robshot article referenced by both hakko504 and jggimi.
+
+http://www.avdeals.com/classroom/Proscanexplained.htm A great page for information on the telecining process.
+
+http://www.henninger.com/resourcecenter/questions/telecine/ A large and technical Telecine Glossary
+
+IVTC AND INTERLACE-DEINTERLACE LINKS
+
+http://www.doom9.org/decomb.htm The Decomb Guide
+
+http://www.doom9.org/decomb-params.htm Decomb Parameters Explained
+
+http://www.doom9.org/mpg/tmpg-ivtc.htm IVTC with TMPGEnc
+
+http://arbor.ee.ntu.edu.tw/~jackei/dvd2avi/ivtc/ jackei’s IVTC Guide using TMPGEnc
+
+http://nickyguides.digital-digest.com/interlace.htm Nicky Page’s Guide to PAL, NTSC, Telecine, IVTC, and Deinterlacing-referenced by hakko504
+
+http://www.lurkertech.com/lg/fields/fields.html A full discussion of fields (thanks Ookami)
+
+http://www.100fps.com/ Deinterlacing-what it is-what to do about it. It’s somewhat disrespectful of the work of a couple of our own, and wrong in some instances, so don’t swallow it whole.
+
+OTHER DOOM9 GUIDE LINKS
+
+http://www.doom9.org/mpg/dvd2avi.htm DVD2AVI Guide
+
+http://www.doom9.org/mpg/d2a-mpeg2dec.htm Frameserving with an .avs
+
+http://www.doom9.org/sbc-basicsetup.htm How to set up a VFAPI for frameserving
+
+http://www.doom9.org/mpg/vfapi_reader_codec.htm Frameserving with a VFAPI
+
+This document was last updated on 09/29/02

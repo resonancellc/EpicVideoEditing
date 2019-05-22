@@ -1,0 +1,30 @@
+
+FILM is photographic material produced for the cinema. It originated at 24 frames/second and has been converted to video, or Telecined, for showing on NTSC TV's.
+
+NTSC is video content produced for TVs used in most of North and South America and East Asia. Normally only news and sports broadcasts, together with some TV series, are produced as pure NTSC in the US NTSC televisions employ 59.94 half-frames, or fields, per second and 525 horizontal lines per frame or 262.5 per field. Typically, 485 lines are used for displaying the picture or 242.5 for each of the two fields making up the frame. The remaining lines are used for delimiting frame boundaries and for synchronization and other information such as teletext and closed captioning. For more information on fields and frames, please refer to the links at the bottom. DVDs made from material produced with video cameras but ALSO incorrectly telecined film material, or material where edits have been made after telecining, will show up in DVD2AVI's status window as NTSC.
+
+PAL is a European TV format using 50 half-frames, or fields, per second. PAL TV's have a slightly higher line count of 625. But again, some of that is overhead, so PAL TVs use 575 horizontal lines per picture frame or 287.5 per field. To show FILM content created at 24fps on PAL's 25fps, it can either be slightly speeded up or a special form of telecining can be applied.
+
+MPEG is a compression format for audio and video. It comes in 3 flavors, MPEG-1, MPEG-2 and MPEG-4. MPEG-1 is the oldest and was created for use in VCD's. MPEG-2 is an extension of MPEG-1 that was intended for broadcasting and high bitrate applications, such as DVD. MPEG-2 also has improved video compression when compared to MPEG-1. MPEG-4 was created to be used in streaming (web) applications where high compression is needed. It is much more flexible than MPEG-1/2. It is currently used by DivX, XviD, QuickTime v6 as well as by other formats. All MPEG formats require mod16 resolution to make compression easy. Together with the known properties of PAL and NTSC the vertical resolution has been set to 480 lines for NTSC and 576 lines for PAL. A horizontal resolution of 720 pixels has been determined to be enough to create a high quality picture. When VCD was created it was realized that a resolution of 720x480x29.97/720x576x25 pixels/fps would not compress well enough at a low bitrate, so it was determined that half the horizontal and vertical resolutions would create a picture comparable to a new VHS tape (VCR). VCD thus uses 352x240/288 pixels. DVD's on the other hand have enough bitrate to utilize the full 720x480x29.97/720x576x25 resolution in MPEG-2. From this an SVCD resolution of 480 horizontal pixels has been derived. By using half the average bitrate and 2/3 of the horizontal resolution, the quality loss would be acceptable, still giving better quality than VHS.
+
+TELECINE is a process where the FILM first is slowed down to 23.976 frames/second. Then for every 4 frames, an extra frame is created from fields of adjacent frames. If a frame consists of two fields, top (t) and bottom (b) and the original sequence is 1t1b 2t2b 3t3b 4t4b, then the telecined sequence would be 1t1b 2t2b 2t3b 3t4b 4t4b (commonly called 2:3 pull down because of the alternating 2 field, 3 field progression). This also means that the frame rate increases to 29.97 frames/second.
+
+FORCE FILM is DVD2AVI's way of trying to reverse the telecining process. This is a quite simple function and will therefore fail when there is too much garbage (i.e. NTSC) in the stream. This will present itself in the preview window where the type value will switch between NTSC xx% and FILM yy%. If the final value is FILM at 95% or lower or NTSC at 5% or higher then you will have to use some other method for doing an Inverse Telecine, or IVTC. There are a number of ways of doing this, including using TMPEGEnc, or Avisynth with GreedyHMA, Decomb, IVTC2.2, or IVTC4.
+
+INTERLACING is the use of two half-frames (fields) instead of one whole frame. The two fields are shown at a slight time difference and in a way so line 1,3,5... is from the first field and line 2,4,6... is from the second. Most TV’s will show the picture this way, first field 1 then field 2. Computer monitors on the other hand will show both fields at once, so some form of deinterlacing must be used on interlaced material.
+
+DEINTERLACING is the process of removing interlacing effects from the picture. This can usually be done in one of three ways:
+
+1) Remove one field and resize what remains to correct size.
+
+2) Smartdeinterlace - Compare the fields and if they differ too much in an area, blend the fields together in that area.
+
+3) Bob-separate the fields, double the frame rate and resize them back to original size. The name comes from the effect that you get if you don't make a line shift when you resize, because then the picture will bob up and down between each frame.
+
+PROGRESSIVE is when a picture only consist of one frame and isn't interlaced.
+
+ASPECT RATIO comes in 2 flavors on DVD, 4:3 and 16:9. 4:3 is the normal ratio for TV and computer monitors. 16:9 is called (anamorphic) widescreen and is used on newer TV sets.
+
+PIXEL ASPECT RATIO is resolution-width divided by resolution-height and screen aspect ratio. Ex. A computer monitor is a 4:3 screen that uses 1024x768 as resolution. Thus the pixel aspect ratio is 1024/(768*4/3)=1, i.e. square pixels. For a widescreen PAL TV it becomes 720/(576*16/9)~=0.7 i.e. wider pixels than they are high. Note that this definition is inverted compared to screen aspect ratio.
+
+LETTERBOXING is adding black bars to a video to make it fit 4:3 or 16:9 aspect ratio exactly.

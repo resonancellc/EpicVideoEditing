@@ -1,0 +1,24 @@
+Source:https://forum.videohelp.com/threads/37390-How-to-frameserve-%28dvd2avi-VirtualDub-Avisynth-VFAPI%29
+14th Apr 2002 19:26 Truman    Feb 2001    Berlin, Germany
+
+Frameserve
+
+DVD2AVI....can open MPEG-2 files, so it can open .vob files that you copied from DVD to HDD.
+
+VirtualDub...is a video editor and frameserver. It can open e.g. AVI, MPEG-1, AVS. Earlier versions can open .asf and .wmv too.
+
+Avisynth....
+video editor and frameserver 
+
+similar to VirtualDub 
+without a GUI.
+
+It is by far the fastest frameserver for DVD to (S)VCD conversion, because it works with YUY2 colourspace as well, while VirtualDub and VFAPI work with RGB colours only. Avisynth is able to read every video file type, that you can play with windows media player or a dvd player, also it reads dvd2avi projects and VirtualDub signpost files. Avisynth comes with a whole lot of filters and plugins as you can use all VirtualDub filters. It is also used to connect Adobe premiere, FlaskMPEG, DVDx and similar tools with a standalone MPEG encoder, so you do not need a encoder plugin.
+Definitily my favorit.
+
+VFAPI...
+not a frameserver. 
+acts like a regular video codec, 
+it is rather an AVI wrapper
+
+VFAPI wrapps dvd2avi projects, VirtualDub and Avisynth scrips as well as TMPGEnc. projects and Aviutl (another video editor) projects to a "pseudo" avi. These avis you can open in every MPEG encoder or video editor. Sometimes you may want to use VFAPI to connect different frameservers.
